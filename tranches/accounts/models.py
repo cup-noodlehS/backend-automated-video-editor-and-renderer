@@ -9,6 +9,7 @@ class CustomUser(AbstractUser):
     - password: CharField to store the password of the user.
     - email: EmailField to store the email address of the user.
     - is_admin: BooleanField to store whether the user is an admin or not.
+    - username: CharField to store the username of the user.
     '''
     is_admin = models.BooleanField(default=False)
 
