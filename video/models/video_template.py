@@ -75,3 +75,42 @@ class StaticLayer(models.Model):
 
     def __str__(self):
         return self.layer_name
+
+
+class DynamicLayer(models.Model):
+    '''
+    **Fields:**
+    - layer_name: CharField to store the name of the dynamic layer.
+    - display_name: CharField to store the display name of the layer.
+    - video_template: ForeignKey to `VideoTemplate`, representing the template to which the dynamic layer belongs.
+    - layer_type: IntegerField to indicate the type of the layer (data, image, video, or audio).
+    - helper_text: TextField to store optional instructions or hints for the layer.
+    - value: CharField to store a dynamic value for the layer, optional.
+    - file: ForeignKey to `File`, optional, representing the associated media file for the layer.
+    '''
+
+    DATA = 0
+    IMAGE = 1
+    VIDEO = 2
+    AUDIO = 3
+    LAYER_TYPE_CHOICES = [
+        (DATA, 'Data'),
+        (IMAGE, 'Image'),
+        (VIDEO, 'Video'),
+        (AUDIO, 'Audio')
+    ]
+
+    layer_name = models.CharField(max_length=255)
+    display_name = models.CharField(max_length=255)
+    video_template = models.ForeignKey(VideoTemplate, on_delete=models.CASCADE, related_name='dynamic_layers')
+    layer_type = models.IntegerField(choices=LAYER_TYPE_CHOICES)
+    helper_text = models.TextField(blank=True, null=True, max_length=255)
+    value = models.CharField(max_length=255, blank=True, null=True)
+    file = models.ForeignKey(File, on_delete=models.CASCADE, blank=True, null=True)
+
+    @property
+    def layer_type_display(self):
+        return dict(self.LAYER_TYPE_CHOICES)[self.layer_type]
+    
+    def __str__(self):
+        return self.layer_name
