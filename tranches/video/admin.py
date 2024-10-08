@@ -73,7 +73,6 @@ class VideoVariantAdmin(admin.ModelAdmin):
     list_display = ('name', 'video_template', 'status_display', 'creator', 'created_at', 'updated_at')
     search_fields = ('name', 'video_template__name', 'creator__username', 'job_id')
     list_filter = ('state', 'created_at', 'updated_at', 'video_template')
-    readonly_fields = ('finished_job_details',)
     inlines = [VideoVariantLayerInline]
     ordering = ('-created_at',)
 
