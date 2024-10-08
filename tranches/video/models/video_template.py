@@ -28,15 +28,16 @@ class VideoTemplate(models.Model):
     ]
 
     name = models.CharField(max_length=255)
-    file = models.ForeignKey(File, on_delete=models.CASCADE)
-    ae_version = models.ForeignKey(AeVersion, null=True, on_delete=models.SET_NULL, blank=True, related_name='video_templates')
-    fonts = models.ManyToManyField(Font, related_name='video_templates', blank=True)
+    file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='video_files')
+    ae_version = models.ForeignKey(AeVersion, null=True, on_delete=models.SET_NULL, blank=True)
+    fonts = models.ManyToManyField(Font, blank=True)
     composition_name = models.CharField(max_length=255)
     status = models.IntegerField(choices=STATUS_CHOICES, default=TESTING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='video_templates')
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='video_templates')
+    sample_video = models.ForeignKey(File, on_delete=models.CASCADE, blank=True, null=True, related_name='sample_videos')
 
     @property
     def status_display(self):
