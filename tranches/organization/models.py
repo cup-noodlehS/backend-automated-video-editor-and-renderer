@@ -52,5 +52,8 @@ class Credits(models.Model):
     end = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name_plural = "Creditses"
+
     def __str__(self):
         return f'{self.organization.name} - {self.amount}'
