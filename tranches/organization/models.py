@@ -28,7 +28,7 @@ class OrganizationMember(models.Model):
     - added_at: DateTimeField that stores when the member was added to the organization.
     '''
 
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='member_organizations')
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='members')
     member = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='organizations')
     added_at = models.DateTimeField(auto_now_add=True)
 
