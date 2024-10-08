@@ -1,10 +1,25 @@
 from django.db import models
 
 from video.models.file import File, Font, AeVersion
+from organization.models import Organization
 from django.contrib.auth import get_user_model
 
 
 class VideoTemplate(models.Model):
+    '''
+    **Fields:**
+    - name: CharField
+    - file: ForeignKey to `File` model, required.
+    - ae_version: ForeignKey to `AeVersion` model, optional (can be null), and uses `SET_NULL` on deletion.
+    - fonts: ManyToManyField to `Font` model, optional.
+    - composition_name: CharField, represents the name of the composition in the video template.
+    - status: IntegerField with choices to indicate if the video template is in testing or finalized. Defaults to `TESTING`.
+    - created_at: DateTimeField that automatically stores the timestamp when the instance is created.
+    - updated_at: DateTimeField that automatically updates the timestamp when the instance is modified.
+    - creator: ForeignKey to the user model (custom user), indicates who created the video template.
+    - organization: ForeignKey to `Organization` model, indicates which organization the template belongs to.
+    '''
+
     TESTING = 0
     FINALIZED = 1
     STATUS_CHOICES = [
@@ -21,6 +36,42 @@ class VideoTemplate(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='video_templates')
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='video_templates')
+
+    @property
+    def status_display(self):
+        return dict(self.STATUS_CHOICES)[self.status]
 
     def __str__(self):
         return self.name
+
+
+class StaticLayer(models.Model):
+    '''
+    **Fields:**
+    - layer_name: CharField
+    - video_template: ForeignKey to `VideoTemplate` model, required.
+    - layer_type: IntegerField to indicate the type of the layer (image, video, or audio).
+    - file: ForeignKey to `File` model, required.
+    '''
+
+    IMAGE = 0
+    VIDEO = 1
+    AUDIO = 2
+    LAYER_TYPE_CHOICES = [
+        (IMAGE, 'Image'),
+        (VIDEO, 'Video'),
+        (AUDIO, 'Audio')
+    ]
+
+    layer_name = models.CharField(max_length=255)
+    video_template = models.ForeignKey(VideoTemplate, on_delete=models.CASCADE, related_name='static_layers')
+    layer_type = models.IntegerField(choices=LAYER_TYPE_CHOICES)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
+
+    @property
+    def layer_type_display(self):
+        return dict(self.LAYER_TYPE_CHOICES)[self.layer_type]
+
+    def __str__(self):
+        return self.layer_name
