@@ -30,7 +30,7 @@ class VideoTemplate(models.Model):
     name = models.CharField(max_length=255)
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     ae_version = models.ForeignKey(AeVersion, null=True, on_delete=models.SET_NULL, blank=True, related_name='video_templates')
-    fonts = models.ManyToManyField(Font, related_name='video_templates', blank=True, null=True)
+    fonts = models.ManyToManyField(Font, related_name='video_templates', blank=True)
     composition_name = models.CharField(max_length=255)
     status = models.IntegerField(choices=STATUS_CHOICES, default=TESTING)
     created_at = models.DateTimeField(auto_now_add=True)

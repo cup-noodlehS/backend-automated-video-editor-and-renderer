@@ -80,7 +80,7 @@ class VideoVariantLayer(models.Model):
         (AUDIO, 'Audio')
     ]
 
-    video_variant = models.Model(VideoVariant, on_delete=models.CASCADE, related_name='layers')
+    video_variant = models.ForeignKey(VideoVariant, on_delete=models.CASCADE, related_name='layers')
     layer_name = models.CharField(max_length=255)
     layer_type = models.IntegerField(choices=LAYER_TYPE_CHOICES)
     file = models.ForeignKey(File, on_delete=models.CASCADE, null=True, blank=True)

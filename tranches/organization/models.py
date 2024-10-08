@@ -14,7 +14,7 @@ class Organization(models.Model):
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='organizations')
+    creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='created_organizations')
 
     def __str__(self):
         return self.name
@@ -28,7 +28,7 @@ class OrganizationMember(models.Model):
     - added_at: DateTimeField that stores when the member was added to the organization.
     '''
 
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='members')
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='member_organizations')
     member = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='organizations')
     added_at = models.DateTimeField(auto_now_add=True)
 
