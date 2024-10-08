@@ -1,8 +1,8 @@
 from django.db import models
-
-from video.models.file import File, Font, AeVersion
-from organization.models import Organization
 from django.contrib.auth import get_user_model
+
+from video.models import File, Font, AeVersion
+from organization.models import Organization
 
 
 class VideoTemplate(models.Model):
@@ -105,7 +105,7 @@ class DynamicLayer(models.Model):
     video_template = models.ForeignKey(VideoTemplate, on_delete=models.CASCADE, related_name='dynamic_layers')
     layer_type = models.IntegerField(choices=LAYER_TYPE_CHOICES)
     helper_text = models.TextField(blank=True, null=True, max_length=255)
-    value = models.CharField(max_length=255, blank=True, null=True)
+    value = models.CharField(max_length=500, blank=True, null=True)
     file = models.ForeignKey(File, on_delete=models.CASCADE, blank=True, null=True)
 
     @property
