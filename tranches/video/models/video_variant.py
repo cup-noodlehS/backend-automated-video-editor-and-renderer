@@ -50,6 +50,7 @@ class VideoVariant(models.Model):
     video_minutes = models.IntegerField(default=0)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
+    is_test = models.BooleanField(default=False)
 
     @property
     def status_display(self):
