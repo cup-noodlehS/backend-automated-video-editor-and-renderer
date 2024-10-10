@@ -1,4 +1,5 @@
 from django.db import models
+from tranches.utils import install_font, FontInstallationError
 
 
 class File(models.Model):
@@ -17,6 +18,22 @@ class File(models.Model):
         return self.name
 
 
+class FontManager(models.Manager):
+    def create(self, **kwargs):
+        if 'file' not in kwargs:
+            raise ValueError('File is required')
+
+        file = kwargs['file']
+        if not isinstance(file, File):
+            raise TypeError('file must be an instance of File model')
+
+        try:
+            install_font(file.url)
+            return super().create(**kwargs)
+        except FontInstallationError as e:
+            raise FontInstallationError(f"Font installation failed: {str(e)}")
+    
+
 class Font(models.Model):
     '''
     **Fields:**
@@ -28,6 +45,8 @@ class Font(models.Model):
     name = models.CharField(max_length=255)
     file = models.ForeignKey(File, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = FontManager()
 
     def __str__(self):
         return self.name
