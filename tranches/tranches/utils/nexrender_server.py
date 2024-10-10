@@ -1,5 +1,5 @@
-import os
 import requests
+from django.conf import settings
 
 
 class FontInstallationError(Exception):
@@ -18,7 +18,8 @@ def install_font(url):
     Raises:
         FontInstallationError: If the font installation fails
     """
-    nexrender_api_url = os.getenv('NEXRENDER_API_URL')
+    print("Installing font")
+    nexrender_api_url = getattr(settings, 'NEXRENDER_API_URL', None)
     if not nexrender_api_url:
         raise FontInstallationError("NEXRENDER_API_URL is not set in environment variables")
     
