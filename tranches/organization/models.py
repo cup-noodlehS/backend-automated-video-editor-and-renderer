@@ -33,6 +33,11 @@ class OrganizationMember(models.Model):
     member = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='organizations')
     added_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        # not allow duplicates
+        if OrganizationMember.objects.filter(organization=self.organization, member=self.member).exists():
+            return
+
     def __str__(self):
         return f'{self.organization.name} - {self.member.username}'
 
@@ -57,4 +62,4 @@ class Credits(models.Model):
         verbose_name_plural = "Creditses"
 
     def __str__(self):
-        return f'{self.organization.name} - {self.amount}'
+        return f'{self.organization.name} - {self.credits}'
