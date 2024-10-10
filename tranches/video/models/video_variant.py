@@ -53,7 +53,7 @@ class VideoVariant(models.Model):
     is_test = models.BooleanField(default=False)
 
     @property
-    def status_display(self):
+    def state_display(self):
         return dict(self.STATUS_CHOICE)[self.state]
     
     def __str__(self):
