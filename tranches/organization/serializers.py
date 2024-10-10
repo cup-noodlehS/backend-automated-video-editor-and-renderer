@@ -25,6 +25,7 @@ class OrganizationMemberSerializer(serializers.ModelSerializer):
     organization_id = serializers.IntegerField(write_only=True)
     organization = OrganizationSerializer(read_only=True)
     member = SimpleUserSerializer(read_only=True)
+    member_id = serializers.IntegerField(write_only=True)
     added_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
 
     class Meta:
