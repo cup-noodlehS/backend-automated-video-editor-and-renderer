@@ -3,9 +3,10 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import CustomUser
 
 class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(read_only=True)
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_admin')
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_admin', 'archived', 'full_name')
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
