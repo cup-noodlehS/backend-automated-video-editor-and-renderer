@@ -10,6 +10,32 @@ from django.core.paginator import Paginator
 from django.db import transaction
 
 class GenericView(viewsets.ViewSet):
+    """
+    # GenericView
+    **Required attributes**
+    - queryset: the model queryset
+    - serializer_class: DRF model serializer class
+
+    **Optional attributes**
+    - size_per_request: number of objects to return per request (default: 20)
+    - permission_classes: list of permission classes
+    - cache_key_prefix: cache key prefix
+    - cache_duration: cache duration in seconds (default: 1 hour)
+
+    **API endpoints**
+    - GET /: list objects
+    - GET /<pk>: retrieve object
+    - POST /: create object
+    - PUT /<pk>: update object
+    - DELETE /<pk>: delete object
+    
+    **Features**
+    - Pagination
+    - Filtering
+    - Caching
+    - CRUD operations
+    """
+
     queryset = None # the model queryset
     serializer_class = None # DRF model serializer class
     size_per_request = 20 # number of objects to return per request
