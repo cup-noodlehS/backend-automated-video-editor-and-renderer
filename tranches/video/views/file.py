@@ -1,9 +1,14 @@
 from tranches.utils.generic_api import GenericView
 
 from video.models import File, Font, AeVersion
-from video.serializers import FileSerializer, FontSerializer, AeVersionSerializer
+from video.serializers import FontSerializer, AeVersionSerializer
 
 
-class FileView(GenericView):
-    queryset = File.objects.all()
-    serializer_class = FileSerializer
+class FontView(GenericView):
+    queryset = Font.objects.all()
+    serializer_class = FontSerializer
+
+
+class AeVersionView(GenericView):
+    queryset = AeVersion.objects.all()
+    serializer_class = AeVersionSerializer
