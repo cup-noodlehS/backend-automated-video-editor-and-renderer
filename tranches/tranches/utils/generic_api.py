@@ -17,6 +17,8 @@ class GenericView(viewsets.ViewSet):
     - serializer_class: DRF model serializer class
 
     **Optional attributes**
+    - allowed_methods: list of allowed methods (default: ['list', 'retrieve', 'create', 'update', 'delete'])
+    - allowed_filter_fields: list of allowed filter fields (default: ['*'])
     - size_per_request: number of objects to return per request (default: 20)
     - permission_classes: list of permission classes
     - cache_key_prefix: cache key prefix
@@ -41,6 +43,7 @@ class GenericView(viewsets.ViewSet):
     size_per_request = 20 # number of objects to return per request
     permission_classes = [] # list of permission classes
     allowed_methods = ['list', 'retrieve', 'create', 'update', 'delete']
+    allowed_filter_fields = ['*'] # list of allowed filter fields
 
     cache_key_prefix = None # cache key prefix
     cache_duration = 60 * 60  # cache duration in seconds
@@ -115,7 +118,7 @@ class GenericView(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         if 'delete' not in self.allowed_methods:
             return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        
+
         instance = get_object_or_404(self.queryset, pk=pk)
         self.delete_cache(pk)
         self.invalidate_list_cache()
@@ -162,7 +165,7 @@ class GenericView(viewsets.ViewSet):
                 excludes[key[8:]] = parsed_value
             else:
                 parsed_value = parse_list_parameter(value) if ',' in value else value.strip()
-                if parsed_value is not None:
+                if parsed_value is not None and (key in self.allowed_filter_fields or '*' in self.allowed_filter_fields):
                     filters[key] = parsed_value
 
         return filters, excludes
