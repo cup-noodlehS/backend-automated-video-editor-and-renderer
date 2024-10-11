@@ -40,6 +40,7 @@ class GenericView(viewsets.ViewSet):
     serializer_class = None # DRF model serializer class
     size_per_request = 20 # number of objects to return per request
     permission_classes = [] # list of permission classes
+    allowed_methods = ['list', 'retrieve', 'create', 'update', 'delete']
 
     cache_key_prefix = None # cache key prefix
     cache_duration = 60 * 60  # cache duration in seconds
@@ -50,6 +51,9 @@ class GenericView(viewsets.ViewSet):
 
     # CRUD operations
     def list(self, request):
+        if 'list' not in self.allowed_methods:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
         try:
             filters, excludes = self.parse_query_params(request)
             top, bottom = self.get_pagination_params(filters)
@@ -66,6 +70,9 @@ class GenericView(viewsets.ViewSet):
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None):
+        if 'retrieve' not in self.allowed_methods:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
         cached_object = None
         if self.cache_key_prefix:
             cache_key = self.get_object_cache_key(pk)
@@ -79,6 +86,9 @@ class GenericView(viewsets.ViewSet):
 
     @transaction.atomic
     def create(self, request):
+        if 'create' not in self.allowed_methods:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             instance = serializer.save()
@@ -89,6 +99,9 @@ class GenericView(viewsets.ViewSet):
 
     @transaction.atomic
     def update(self, request, pk=None):
+        if 'update' not in self.allowed_methods:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
         instance = get_object_or_404(self.queryset, pk=pk)
         serializer = self.serializer_class(instance, data=request.data)
         if serializer.is_valid():
@@ -100,6 +113,9 @@ class GenericView(viewsets.ViewSet):
 
     @transaction.atomic
     def destroy(self, request, pk=None):
+        if 'delete' not in self.allowed_methods:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
         instance = get_object_or_404(self.queryset, pk=pk)
         self.delete_cache(pk)
         self.invalidate_list_cache()
