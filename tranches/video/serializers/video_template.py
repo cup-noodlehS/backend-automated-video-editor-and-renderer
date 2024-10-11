@@ -44,7 +44,10 @@ class VideoTemplateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VideoTemplate
-        fields = "__all__"
+        fields = ['id', 'name', 'file', 'file_id', 'ae_version', 'ae_version_id', 'fonts', 'fonts_id',
+            'composition_name', 'status', 'status_display', 'created_at', 'updated_at',
+            'creator', 'creator_id', 'organization', 'organization_id',
+            'sample_video', 'sample_video_id', 'video_minutes',]
 
 
 class SimpleVideoTemplateSerializer(VideoTemplateSerializer):
@@ -82,3 +85,17 @@ class DynamicLayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = DynamicLayer
         fields = "__all__"
+
+
+class DetailedVideoTemplateSerializer(VideoTemplateSerializer):
+    static_layers = serializers.SerializerMethodField(read_only=True)
+    dynamic_layers = serializers.SerializerMethodField(read_only=True)
+
+    class Meta(VideoTemplateSerializer.Meta):
+        fields = VideoTemplateSerializer.Meta.fields + ['static_layers', 'dynamic_layers']
+
+    def get_static_layers(self, obj):
+        return StaticLayerSerializer(obj.static_layers.all(), many=True).data
+
+    def get_dynamic_layers(self, obj):
+        return DynamicLayerSerializer(obj.dynamic_layers.all(), many=True).data
