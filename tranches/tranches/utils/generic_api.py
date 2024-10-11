@@ -42,7 +42,7 @@ class GenericView(viewsets.ViewSet):
     serializer_class = None # DRF model serializer class
     size_per_request = 20 # number of objects to return per request
     permission_classes = [] # list of permission classes
-    allowed_methods = ['list', 'retrieve', 'create', 'update', 'delete']
+    allowed_methods = ['list', 'create', 'retrieve', 'update', 'delete']
     allowed_filter_fields = ['*'] # list of allowed filter fields
 
     cache_key_prefix = None # cache key prefix
