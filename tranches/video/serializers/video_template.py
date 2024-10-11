@@ -40,6 +40,7 @@ class VideoTemplateSerializer(serializers.ModelSerializer):
     organization_id = serializers.IntegerField(write_only=True)
     sample_video = FileSerializer(read_only=True)
     sample_video_id = serializers.IntegerField(write_only=True, required=False, allow_null=True)
+    video_minutes = serializers.IntegerField()
 
     class Meta:
         model = VideoTemplate

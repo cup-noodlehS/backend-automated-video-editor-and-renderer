@@ -14,7 +14,6 @@ class VideoVariant(models.Model):
     - state: IntegerField to track the current status of the video variant (queued, rendering, uploading, etc.).
     - job_id: CharField to store the unique ID of the rendering/upload job.
     - finished_job_details: JSONField, optional, to store details about the completed job.
-    - video_minutes: IntegerField to store the length of the video in minutes.
     - created_at: DateField to store the creation date (automatically populated).
     - updated_at: DateField to store the last modification date (automatically updated).
     
@@ -47,7 +46,6 @@ class VideoVariant(models.Model):
     state = models.IntegerField(choices=STATUS_CHOICE, default=QUEUED)
     job_id = models.CharField(max_length=255)
     finished_job_details = models.JSONField(null=True, blank=True)
-    video_minutes = models.IntegerField(default=0)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     is_test = models.BooleanField(default=False)

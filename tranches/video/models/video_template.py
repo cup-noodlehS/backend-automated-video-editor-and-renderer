@@ -18,6 +18,7 @@ class VideoTemplate(models.Model):
     - updated_at: DateTimeField that automatically updates the timestamp when the instance is modified.
     - creator: ForeignKey to the user model (custom user), indicates who created the video template.
     - organization: ForeignKey to `Organization` model, indicates which organization the template belongs to.
+    - video_minutes: IntegerField to store the length of the video in minutes.
     '''
 
     TESTING = 0
@@ -38,6 +39,7 @@ class VideoTemplate(models.Model):
     creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='video_templates')
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='video_templates')
     sample_video = models.ForeignKey(File, on_delete=models.CASCADE, blank=True, null=True, related_name='sample_videos')
+    video_minutes = models.IntegerField(default=0)
 
     @property
     def status_display(self):

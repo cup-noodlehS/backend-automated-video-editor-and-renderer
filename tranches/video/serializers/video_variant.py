@@ -17,7 +17,6 @@ class VideoVariantSerializer(serializers.ModelSerializer):
     state_display = serializers.CharField(read_only=True)
     job_id = serializers.CharField(max_length=255)
     finished_job_details = serializers.JSONField(required=False, allow_null=True)
-    video_minutes = serializers.IntegerField()
     created_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
     updated_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
     is_test = serializers.BooleanField()
