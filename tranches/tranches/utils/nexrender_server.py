@@ -67,4 +67,25 @@ def render_video(template_uri, composition_name, assets, priority=0):
     except requests.RequestException as e:
         raise VideoRenderingError(f"Failed to connect to Nexrender API: {str(e)}")
 
-# def get_render_job_details(job_id)
+def get_all_render_jobs():
+    """
+    Get all render jobs from the Nexrender server
+    """
+    print("Getting all render jobs")
+    if not nexrender_api_url:
+        raise VideoRenderingError("NEXRENDER_API_URL is not set in environment variables")
+    
+    render_endpoint = f"{nexrender_api_url.rstrip('/')}/jobs"
+    try:
+        response = requests.get(
+            render_endpoint,
+            timeout=60
+        )
+
+        if response.status_code != 200:
+            raise VideoRenderingError(f"Failed to get render jobs with status code {response.status_code}: {response.text}")
+        
+        return response.json()
+    
+    except requests.RequestException as e:
+        raise VideoRenderingError(f"Failed to connect to Nexrender API: {str(e)}")
